@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).then(() => console.log('Connected to MongoDB'))
   .catch(err => {
     console.error('Could not connect to MongoDB', err);
-    process.exit(1); // Salir del proceso si no se puede conectar a MongoDB
+    process.exit(1); 
   });
 
 const hbs = engine({
@@ -55,7 +55,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-// Middleware to set cartId for all views
+
 app.use(async (req, res, next) => {
   try {
     if (!req.session.cartId) {
@@ -76,7 +76,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/', viewRoutes);
 
-// Global error handling middleware
+
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).send('Internal server error');
