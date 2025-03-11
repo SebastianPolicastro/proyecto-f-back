@@ -3,7 +3,7 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+const renderProductsPage = async (req, res) => {
     const { limit = 10, page = 1, sort, query, status } = req.query;
     const options = {
         limit: parseInt(limit),
@@ -40,46 +40,13 @@ router.get('/', async (req, res) => {
     } catch (error) {
         res.status(500).send('Error al cargar productos');
     }
+};
+
+router.get('/', (req, res) => {
+    res.render('home');
 });
 
-router.get('/products', async (req, res) => {
-    const { limit = 10, page = 1, sort, query, status } = req.query;
-    const options = {
-        limit: parseInt(limit),
-        page: parseInt(page),
-        sort: sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {}
-    };
-
-    const filter = {};
-    if (query) {
-        filter.$or = [
-            { title: new RegExp(query, 'i') },
-            { description: new RegExp(query, 'i') }
-        ];
-    }
-
-    if (status === 'true' || status === 'false') {
-        filter.status = status === 'true';
-    }
-
-    try {
-        const products = await Product.paginate(filter, options);
-        res.render('products', {
-            products: products.docs,
-            totalPages: products.totalPages,
-            prevPage: products.prevPage,
-            nextPage: products.nextPage,
-            page: products.page,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}&status=${status}` : null,
-            nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}&status=${status}` : null,
-            cartId: res.locals.cartId
-        });
-    } catch (error) {
-        res.status(500).send('Error al cargar productos');
-    }
-});
+router.get('/products', renderProductsPage);
 
 router.get('/products/:id', async (req, res) => {
     try {
