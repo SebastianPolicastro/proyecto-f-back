@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="/css/styles.css">
+<h1>Carrito de Compras</h1>
+<ul>
+  {{#each cart.products}}
+    <li>
+      <h2>{{this.product.title}}</h2>
+      <p>{{this.product.description}}</p>
+      <p><strong>Código:</strong> {{this.product.code}}</p>
+      <p><strong>Precio:</strong> ${{this.product.price}}</p>
+      <p><strong>Estado:</strong> {{#if this.product.status}}Disponible{{else}}No disponible{{/if}}</p>
+      <p><strong>Categoría:</strong> {{this.product.category}}</p>
+      <p><strong>Miniaturas:</strong></p>
+      <ul>
+        {{#each this.product.thumbnails}}
+          <li><img src="{{this}}" alt="Miniatura" style="width: 100px; height: 100px;"></li>
+        {{/each}}
+      </ul>
+      <p><strong>Cantidad:</strong> {{this.quantity}}</p>
+      <button onclick="deleteFromCart('{{../cart._id}}', '{{this.product._id}}', 1)">Eliminar una unidad del carrito</button>
+    </li>
+  {{/each}}
+</ul>
+<button onclick="clearCart('{{cart._id}}')">Vaciar Carrito</button>
+<a href="/">Volver a productos</a>
+
+<script>
+  function deleteFromCart(cartId, productId, quantity) {
+    fetch(`/api/carts/${cartId}/products/${productId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ quantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        alert('Producto eliminado del carrito');
+        location.reload(); // Alternativamente, elimina el producto del DOM sin recargar
+      } else {
+        alert('Error al eliminar producto del carrito');
+      }
+    });
+  }
+
+  function clearCart(cartId) {
+    fetch(`/api/carts/${cartId}/clear`, {
+      method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        alert('Carrito vaciado');
+        location.reload(); // Alternativamente, vacía el carrito del DOM sin recargar
+      } else {
+        alert('Error al vaciar el carrito');
+      }
+    });
+  }
+</script>

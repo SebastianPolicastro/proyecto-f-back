@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="/css/styles.css">
+<h1>{{product.title}}</h1>
+<p>{{product.description}}</p>
+<p><strong>Code:</strong> {{product.code}}</p>
+<p><strong>Price:</strong> ${{product.price}}</p>
+<p><strong>Status:</strong> {{#if product.status}}Available{{else}}Unavailable{{/if}}</p>
+<p><strong>Stock:</strong> {{product.stock}}</p>
+<p><strong>Category:</strong> {{product.category}}</p>
+<p><strong>Thumbnails:</strong></p>
+<ul>
+  {{#each product.thumbnails}}
+    <li><img src="{{this}}" alt="Thumbnail" style="width: 100px; height: 100px;"></li>
+  {{/each}}
+</ul>
+<form action="/carts/{{cartId}}/products" method="POST">
+  <input type="hidden" name="productId" value="{{product._id}}">
+  <input type="number" name="quantity" value="1" min="1">
+  <button type="submit">Añadir al carrito</button>
+</form>
+<a href="/carts/{{@root.cartId}}">Ir al carrito</a>
+<a href="/">Volver a productos</a>
