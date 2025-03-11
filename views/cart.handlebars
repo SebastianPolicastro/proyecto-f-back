@@ -16,12 +16,12 @@
         {{/each}}
       </ul>
       <p><strong>Cantidad:</strong> {{this.quantity}}</p>
-      <button onclick="deleteFromCart('{{../cart._id}}', '{{this.product._id}}', 1)">Eliminar una unidad del carrito</button>
+      <button onclick="deleteFromCart('{{../cart._id}}', '{{this.product._id}}', 1)" class="btn">Eliminar una unidad del carrito</button>
     </li>
   {{/each}}
 </ul>
-<button onclick="clearCart('{{cart._id}}')">Vaciar Carrito</button>
-<a href="/">Volver a productos</a>
+<button onclick="clearCart('{{cart._id}}')" class="btn">Vaciar Carrito</button>
+<a href="/products" class="btn">Volver a productos</a>
 
 <script>
   function deleteFromCart(cartId, productId, quantity) {

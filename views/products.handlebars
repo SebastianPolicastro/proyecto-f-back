@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Productos</h1>
-    <form method="GET" action="/">
+    <form method="GET" action="/products">
         <label for="query">Buscar por nombre o categoria:</label>
         <input type="text" id="query" name="query" value="{{query}}">
         <label for="limit">Límite:</label>
@@ -26,8 +26,8 @@
             <option value="true" {{#if (eq status 'true')}}selected{{/if}}>Disponible</option>
             <option value="false" {{#if (eq status 'false')}}selected{{/if}}>No disponible</option>
         </select>
-        <button type="submit">Buscar</button>
-        <a href="/carts/{{@root.cartId}}">Ir al carrito</a>
+        <button type="submit" class="btn">Buscar</button>
+        <a href="/carts/{{@root.cartId}}" class="btn">Ir al carrito</a>
     </form>
 
     <ul>
@@ -37,9 +37,11 @@
                 <p>{{this.description}}</p>
                 <p>Precio: {{this.price}} €</p>
                 <p>Disponibilidad: {{#if this.status}}Sí{{else}}No{{/if}}</p>
-                <form action="/api/carts/{{@root.cartId}}/products" method="POST" class="cart-form">
+                <a href="/products/{{this._id}}"><button class="btn">Ir a los detalles del producto</button></a>
+                <form  action="/api/carts/{{@root.cartId}}/products" method="POST" class="cart-form">
                     <input type="hidden" name="productId" value="{{this._id}}">
                 </form>
+                <hr>
                 
             </li>
         {{/each}}
